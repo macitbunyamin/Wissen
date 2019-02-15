@@ -8,12 +8,16 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace Wissen
+namespace Wissen.Admin
 {
     public class MvcApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
@@ -38,7 +42,7 @@ namespace Wissen
             builder.RegisterFilterProvider();
 
             // OPTIONAL: Enable action method parameter injection (RARE).
-            
+
 
             // Set the dependency resolver to be Autofac.
             var container = builder.Build();
