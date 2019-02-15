@@ -19,12 +19,39 @@ namespace Wissen.Controllers
 
         }
         [HttpPost]
-        public ActionResult DenemeForm(Wissen.Models.DenemeForm model)
+        public ActionResult DenemeForm(Wissen.Models.DenemeForm model1)
         {
             if(ModelState.IsValid)
             {
-                //todo mail gönder
-                ViewBag.Message = "mail gonderildi";
+                bool hasError = false;
+                try
+                {
+                    System.Net.Mail.MailMessage mailMessage = new System.Net.Mail.MailMessage();
+                    mailMessage.From = new System.Net.Mail.MailAddress("macitbunyamin@gmail.com", "ali");
+                    mailMessage.Subject = "İletişim Formu: " + model1.firstName + "" + model1.LastName;
+                    mailMessage.To.Add("macitbunyamin@gmail.com macitbunyamin@gmail.com");
+                    string body;
+                    body = "Ad Soyad: " + model1.firstName + "<br />";
+                    body += "Telefon: " + model1.LastName + "<br />";
+                    body += "E-posta: " + model1.Email + "<br />";
+                    body += "Telefon: " + model1.Phone + "<br />";
+                    mailMessage.IsBodyHtml = true;
+                    mailMessage.Body = body;
+
+                    System.Net.Mail.SmtpClient smtp = new System.Net.Mail.SmtpClient("smtp.gmail.com", 587);
+                    smtp.Credentials = new System.Net.NetworkCredential("d@gmail.com", "34ff6229");
+                    smtp.EnableSsl = true;
+                    smtp.Send(mailMessage);
+                    ViewBag.Message = "Mesajınız gönderildi. Teşekkür ederiz.";
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("Error", ex.Message);
+                    hasError = true;
+                }
+                if (hasError == false) { 
+                    ViewBag.Message = "mail gonderildi galiba mail adresini kontrol et";
+                }
                 return View();
             }
             return View();
